@@ -25,21 +25,42 @@ describe('complex-express-models-routes', () => {
       });
   });
 
-  xit('should get ALL species', () => {
-    const newSpecies1 = {
-      species: 'Amphibians',
-    };
-    const newSpecies2 = {
-      species: 'Amphibians',
-    };
-    return request(app)
-      .post('/api/species')
-      .send(newSpecies1)
+  it('should get ALL species', async () => {
+    const newSpecies = [
+      {
+        species: 'Amphibians',
+        extinct: true,
+      },
+      {
+        species: 'Fish',
+        extinct: false,
+      },
+      {
+        species: 'Canine',
+        extinct: false,
+      },
+    ];
+    await request(app).post('/api/species').send(newSpecies).then();
+    return await request(app)
+      .get('/api/species')
       .then((res) => {
-        expect(res.body).toEqual({
-          id: '1',
-          species: 'Amphibians',
-        });
+        expect(res.body).toEqual([
+          {
+            id: '1',
+            species: 'Amphibians',
+            extinct: true,
+          },
+          {
+            id: '2',
+            species: 'Fish',
+            extinct: false,
+          },
+          {
+            id: '3',
+            species: 'Canine',
+            extinct: false,
+          },
+        ]);
       });
   });
 
