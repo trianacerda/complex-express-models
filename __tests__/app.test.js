@@ -11,10 +11,30 @@ describe('complex-express-models-routes', () => {
   it('should add a new species', () => {
     const newSpecies = {
       species: 'Amphibians',
+      extinct: true,
     };
     return request(app)
       .post('/api/species')
       .send(newSpecies)
+      .then((res) => {
+        expect(res.body).toEqual({
+          id: '1',
+          species: 'Amphibians',
+          extinct: true,
+        });
+      });
+  });
+
+  xit('should get ALL species', () => {
+    const newSpecies1 = {
+      species: 'Amphibians',
+    };
+    const newSpecies2 = {
+      species: 'Amphibians',
+    };
+    return request(app)
+      .post('/api/species')
+      .send(newSpecies1)
       .then((res) => {
         expect(res.body).toEqual({
           id: '1',
