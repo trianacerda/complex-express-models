@@ -17,6 +17,7 @@ describe('complex-express-models-routes', () => {
       .send(newSpecies)
       .then((res) => {
         expect(res.body).toEqual({
+          id: '1',
           species: 'Amphibians',
         });
       });
