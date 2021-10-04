@@ -10,14 +10,14 @@ describe('complex-express-models-routes', () => {
 
   it('should add a new species', () => {
     const newSpecies = {
-      Species: 'Amphibians',
+      species: 'Amphibians',
     };
     return request(app)
       .post('/api/species')
       .send(newSpecies)
       .then((res) => {
         expect(res.body).toEqual({
-          Species: 'Amphibians',
+          species: 'Amphibians',
         });
       });
   });
