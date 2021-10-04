@@ -63,6 +63,23 @@ describe('complex-express-models-routes', () => {
       });
   });
 
+  it('should add a new animal', () => {
+    const newAnimal = {
+      animal: 'Dog',
+      name: 'Mister',
+    };
+    return request(app)
+      .post('/api/species')
+      .send(newAnimal)
+      .then((res) => {
+        expect(res.body).toEqual({
+          id: '1',
+          animal: 'Dog',
+          name: 'Mister',
+        });
+      });
+  });
+
   afterAll(() => {
     pool.end();
   });
