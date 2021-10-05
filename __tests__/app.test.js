@@ -71,7 +71,7 @@ describe('complex-express-models-routes', () => {
     };
     await request(app).post('/api/species').send(newSpecies);
     return await request(app)
-      .post('api/animals')
+      .post('/api/animals')
       .send(newAnimal)
       .then((res) => {
         console.log('res.body', res.body);
