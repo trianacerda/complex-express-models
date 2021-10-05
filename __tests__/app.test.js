@@ -8,11 +8,11 @@ describe('complex-express-models-routes', () => {
     return setup(pool);
   });
 
+  const newSpecies = {
+    species: 'Amphibians',
+    extinct: true,
+  };
   it('should add a new species', () => {
-    const newSpecies = {
-      species: 'Amphibians',
-      extinct: true,
-    };
     return request(app)
       .post('/api/species')
       .send(newSpecies)
@@ -63,19 +63,23 @@ describe('complex-express-models-routes', () => {
       });
   });
 
-  it('should add a new animal', () => {
+  it('should add a new animal', async () => {
     const newAnimal = {
       animal: 'Dog',
       name: 'Mister',
+      species_id: '1',
     };
-    return request(app)
-      .post('/api/species')
+    await request(app).post('/api/species').send(newSpecies);
+    return await request(app)
+      .post('api/animals')
       .send(newAnimal)
       .then((res) => {
+        console.log('res.body', res.body);
         expect(res.body).toEqual({
           id: '1',
           animal: 'Dog',
           name: 'Mister',
+          species_id: '1',
         });
       });
   });
