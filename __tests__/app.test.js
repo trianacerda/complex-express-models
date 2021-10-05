@@ -91,6 +91,7 @@ describe('complex-express-models-routes', () => {
   });
 
   it('should get animal by id', async () => {
+    await request(app).post('/api/species').send(newSpecies);
     await request(app).post('/api/animals').send(newAnimal);
     return await request(app)
       .get('/api/animals/1')
