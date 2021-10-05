@@ -12,6 +12,13 @@ describe('complex-express-models-routes', () => {
     species: 'Amphibians',
     extinct: true,
   };
+
+  const newAnimal = {
+    animal: 'Dog',
+    name: 'Mister',
+    species_id: '1',
+  };
+
   it('should add a new species', () => {
     return request(app)
       .post('/api/species')
@@ -74,7 +81,20 @@ describe('complex-express-models-routes', () => {
       .post('/api/animals')
       .send(newAnimal)
       .then((res) => {
-        console.log('res.body', res.body);
+        expect(res.body).toEqual({
+          id: '1',
+          animal: 'Dog',
+          name: 'Mister',
+          species_id: '1',
+        });
+      });
+  });
+
+  it('should get animal by id', async () => {
+    await request(app).post('/api/animals').send(newAnimal);
+    return await request(app)
+      .get('/api/animals/1')
+      .then((res) => {
         expect(res.body).toEqual({
           id: '1',
           animal: 'Dog',
