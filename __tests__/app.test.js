@@ -114,13 +114,22 @@ describe('complex-express-models-routes', () => {
     return await request(app)
       .get('/api/animals/1')
       .then((res) => {
-        console.log('res', res.body);
         expect(res.body).toEqual({
           id: '1',
           animal: 'Dog',
           name: 'Luna-Girl',
           species_id: '1',
         });
+      });
+  });
+
+  it('should delete an animal id', async () => {
+    await request(app).post('/api/species').send(newSpecies);
+    await request(app).post('/api/animals').send(newAnimal);
+    return await request(app)
+      .delete('/api/animals/1')
+      .then((res) => {
+        expect(res.body).toEqual({});
       });
   });
 
