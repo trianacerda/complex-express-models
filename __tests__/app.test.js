@@ -105,6 +105,25 @@ describe('complex-express-models-routes', () => {
       });
   });
 
+  it('should update an animal with /patch by id', async () => {
+    await request(app).post('/api/species').send(newSpecies);
+    await request(app).post('/api/animals').send(newAnimal);
+    await request(app).patch('/api/animals/1').send({
+      name: 'Luna-Girl',
+    });
+    return await request(app)
+      .get('/api/animals/1')
+      .then((res) => {
+        console.log('res', res.body);
+        expect(res.body).toEqual({
+          id: '1',
+          animal: 'Dog',
+          name: 'Luna-Girl',
+          species_id: '1',
+        });
+      });
+  });
+
   afterAll(() => {
     pool.end();
   });
