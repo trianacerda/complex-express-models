@@ -8,57 +8,74 @@ describe('complex-express-models-routes', () => {
     return setup(pool);
   });
 
-  const newSpecies = {
-    species: 'Amphibians',
-    extinct: true,
+  const dogSpecies = {
+    species: 'Canine',
+    extinct: false,
   };
 
-  const newAnimal = {
+  const catSpecies = {
+    species: 'Feline',
+    extinct: false,
+  };
+
+  const pigSpecies = {
+    species: 'Pig',
+    extinct: false,
+  };
+
+  const dogAnimal = {
     animal: 'Dog',
     name: 'Mister',
     species_id: '1',
   };
 
+  // const catAnimalT = {
+  //   animal: 'Cat',
+  //   name: 'Tony THE Tiger',
+  //   species_id: '2',
+  // };
+
+  // const pigAnimal = {
+  //   animal: 'Pig',
+  //   name: 'Panda',
+  //   species_id: '3',
+  // };
+
+  // const catAnimalB = {
+  //   animal: 'Cat',
+  //   name: 'Bella Bae',
+  //   species_id: '2',
+  // };
+
   it('should add a new species', () => {
     return request(app)
       .post('/api/species')
-      .send(newSpecies)
+      .send(dogSpecies)
       .then((res) => {
         expect(res.body).toEqual({
           id: '1',
-          species: 'Amphibians',
-          extinct: true,
+          species: 'Canine',
+          extinct: false,
         });
       });
   });
 
   it('should get ALL species', async () => {
-    await request(app).post('/api/species').send(
-      {
-        species: 'Amphibians',
-        extinct: true,
-      },
-      {
-        species: 'Fish',
-        extinct: false,
-      },
-      {
-        species: 'Canine',
-        extinct: false,
-      }
-    );
+    await request(app).post('/api/species').send(dogSpecies);
+    await request(app).post('/api/species').send(catSpecies);
+    await request(app).post('/api/species').send(pigSpecies);
     return await request(app)
       .get('/api/species')
       .then((res) => {
         expect(res.body).toEqual(
           {
             id: '1',
-            species: 'Amphibians',
-            extinct: true,
+            species: 'Canine',
+            extinct: false,
           },
           {
             id: '2',
-            species: 'Fish',
+            species: 'Feline',
             extinct: false,
           },
           {
@@ -70,16 +87,11 @@ describe('complex-express-models-routes', () => {
       });
   });
 
-  it('should add a new animal', async () => {
-    const newAnimal = {
-      animal: 'Dog',
-      name: 'Mister',
-      species_id: '1',
-    };
-    await request(app).post('/api/species').send(newSpecies);
+  it('should add a dog animal', async () => {
+    await request(app).post('/api/species').send(dogSpecies);
     return await request(app)
       .post('/api/animals')
-      .send(newAnimal)
+      .send(dogAnimal)
       .then((res) => {
         expect(res.body).toEqual({
           id: '1',
@@ -91,8 +103,8 @@ describe('complex-express-models-routes', () => {
   });
 
   it('should get animal by id', async () => {
-    await request(app).post('/api/species').send(newSpecies);
-    await request(app).post('/api/animals').send(newAnimal);
+    await request(app).post('/api/species').send(dogSpecies);
+    await request(app).post('/api/animals').send(dogAnimal);
     return await request(app)
       .get('/api/animals/1')
       .then((res) => {
@@ -106,8 +118,8 @@ describe('complex-express-models-routes', () => {
   });
 
   it('should update an animal with /patch by id', async () => {
-    await request(app).post('/api/species').send(newSpecies);
-    await request(app).post('/api/animals').send(newAnimal);
+    await request(app).post('/api/species').send(dogSpecies);
+    await request(app).post('/api/animals').send(dogAnimal);
     await request(app).patch('/api/animals/1').send({
       name: 'Luna-Girl',
     });
@@ -124,14 +136,32 @@ describe('complex-express-models-routes', () => {
   });
 
   it('should delete an animal id', async () => {
-    await request(app).post('/api/species').send(newSpecies);
-    await request(app).post('/api/animals').send(newAnimal);
+    await request(app).post('/api/species').send(dogSpecies);
+    await request(app).post('/api/animals').send(dogAnimal);
     return await request(app)
       .delete('/api/animals/1')
       .then((res) => {
         expect(res.body).toEqual({});
       });
   });
+
+  // it('should get ALL animals WITH their speicies ID, async', async () => {
+  //   await request(app).post('/api/species').send(dogSpecies);
+  //   await request(app).post('/api/animals').send(dogAnimal);
+  //   await request(app).post('/api/animals').send(catAnimalT);
+  //   await request(app).post('/api/animals').send(pigAnimal);
+  //   await request(app).post('/api/animals').send(catAnimalB);
+  //   return await request(app)
+  //     .get('/api/animals')
+  //     .then((res) => {
+  //       expect(res.body).toEqual({
+  //         id: '1',
+  //         animal: 'Dog',
+  //         name: 'Mister',
+  //         species_id: '1',
+  //       });
+  //     });
+  // });
 
   afterAll(() => {
     pool.end();
