@@ -200,10 +200,10 @@ describe('complex-express-models-routes', () => {
   });
 
   it('should get all species that are NOT extinct', async () => {
-    await request(app).post('/api/species').send(dogSpecies);
     await request(app).post('/api/species').send(catSpecies);
+    await request(app).post('/api/species').send(dogSpecies);
     await request(app).post('/api/species').send(pigSpecies);
-    await request(app).patch('/api/species/1').send({ id: '1', extinct: true });
+    await request(app).patch('/api/species/2').send({ id: '2', extinct: true });
 
     return await request(app)
       .get('/api/species/not-extinct')
@@ -211,11 +211,9 @@ describe('complex-express-models-routes', () => {
         expect(res.body).toEqual([
           {
             ...catSpecies,
-            id: '1',
           },
           {
             ...pigSpecies,
-            id: '3',
           },
         ]);
       });
