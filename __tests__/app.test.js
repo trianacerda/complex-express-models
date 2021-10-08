@@ -184,16 +184,16 @@ describe('complex-express-models-routes', () => {
       });
   });
 
-  it.only('should get a count of animals by their species', async () => {
+  it('update a species extinct key with PATCH', async () => {
     await request(app).post('/api/species').send(pigSpecies);
-    await request(app).patch('/api/species').send({ id: '1', extinct: true });
+    await request(app).patch('/api/species/1').send({ id: '1', extinct: true });
 
     return await request(app)
       .get('/api/species')
       .then((res) => {
         expect(res.body).toEqual({
-          extinct: true,
           ...pigSpecies,
+          extinct: true,
           id: '1',
         });
       });
