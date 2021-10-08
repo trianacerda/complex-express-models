@@ -184,6 +184,22 @@ describe('complex-express-models-routes', () => {
       });
   });
 
+  it.only('should get a count of animals by their species', async () => {
+    await request(app).post('/api/species').send(dogSpecies);
+    await request(app).post('/api/species').send(catSpecies);
+    await request(app).post('/api/species').send(pigSpecies);
+    await request(app).patch('/api/species').send({ id: '3', extinct: true });
+
+    return await request(app)
+      .get('/api/animals/3')
+      .then((res) => {
+        expect(res.body).toEqual({
+          extinct: true,
+          ...pigSpecies,
+        });
+      });
+  });
+
   afterAll(() => {
     pool.end();
   });
