@@ -191,7 +191,7 @@ describe('complex-express-models-routes', () => {
     await request(app).patch('/api/species').send({ id: '3', extinct: true });
 
     return await request(app)
-      .get('/api/animals/3')
+      .get('/api/species/3')
       .then((res) => {
         expect(res.body).toEqual({
           extinct: true,
