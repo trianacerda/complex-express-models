@@ -165,6 +165,25 @@ describe('complex-express-models-routes', () => {
       });
   });
 
+  it('should get a count of animals by their species', async () => {
+    await request(app).post('/api/species').send(dogSpecies);
+    await request(app).post('/api/species').send(catSpecies);
+    await request(app).post('/api/species').send(pigSpecies);
+    await request(app).post('/api/animals').send(dogAnimal);
+    await request(app).post('/api/animals').send(catAnimalT);
+    await request(app).post('/api/animals').send(pigAnimal);
+    await request(app).post('/api/animals').send(catAnimalB);
+    return await request(app)
+      .get('/api/animals/count')
+      .then((res) => {
+        expect(res.body).toEqual([
+          { species: 'Feline', animals: '2' },
+          { species: 'Canine', animals: '1' },
+          { species: 'Pig', animals: '1' },
+        ]);
+      });
+  });
+
   afterAll(() => {
     pool.end();
   });
